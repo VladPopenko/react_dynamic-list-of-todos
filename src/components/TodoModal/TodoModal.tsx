@@ -19,15 +19,13 @@ export const TodoModal: React.FC<Props> = ({ todo, hideModal }) => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-
     getUser(todo.userId)
       .then(userInfo => setUser(userInfo))
+      .catch(e => {
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        setError(`Помилка: ${e.message}`);
+      })
       .finally(() => setIsLoading(false));
-
-    return () => {
-      // Тут не потрібно знову викликати setIsLoading(true)
-    };
   }, [todo]);
 
   return (
@@ -81,3 +79,7 @@ export const TodoModal: React.FC<Props> = ({ todo, hideModal }) => {
     </div>
   );
 };
+function setError(arg0: string) {
+  throw new Error('Function not implemented.');
+}
+

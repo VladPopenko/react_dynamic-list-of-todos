@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Todo } from '../../types/Todo';
 import classNames from 'classnames';
 
@@ -9,23 +9,14 @@ type Props = {
 };
 
 export const TodoItem: React.FC<Props> = ({ todo, getTodo, isModalShown }) => {
-  const [isButtonActive, setIsButtonActive] = useState(false);
-
   const handlerMoreInfo = () => {
     getTodo(todo);
-    setIsButtonActive(true);
   };
-
-  useEffect(() => {
-    if (!isModalShown) {
-      setIsButtonActive(false);
-    }
-  }, [isModalShown]);
 
   return (
     <tr
       data-cy="todo"
-      className={classNames({ 'has-background-info-light': isButtonActive })}
+      className={classNames({ 'has-background-info-light': isModalShown })}
     >
       <td className="is-vcentered">{todo.id}</td>
 
@@ -42,8 +33,8 @@ export const TodoItem: React.FC<Props> = ({ todo, getTodo, isModalShown }) => {
       <td className="is-vcentered is-expanded">
         <p
           className={classNames({
-            'has-text-danger': todo.completed === false,
-            'has-text-success': todo.completed === true,
+            'has-text-danger': !todo.completed,
+            'has-text-success': todo.completed,
           })}
         >
           {todo.title}
@@ -57,10 +48,10 @@ export const TodoItem: React.FC<Props> = ({ todo, getTodo, isModalShown }) => {
           type="button"
         >
           <span className="icon">
-            {isButtonActive ? (
+            {isModalShown ? (
               <i className="far fa-eye-slash" />
             ) : (
-              <i className="far fa-eye " />
+              <i className="far fa-eye" />
             )}
           </span>
         </button>
